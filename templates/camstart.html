@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=0, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/camstart.css') }}">
+</head>
+<body>
+  
+  <div class = "camlink_container">
+
+    <div class="camlink_left">
+      <h2>CAMLINK</h2>
+
+      <div class="navigation">
+        <div class="nav">Home</div>
+        <div class="nav selected">CamLink</div>
+        <div class="nav">Screen Share</div>
+      </div>
+    
+      <p>Logout</p>
+    
+    </div>
+
+
+    <div class="camstart_mid">
+      
+      <div class="camstart_mid_top">
+        <p>Link Code: </p>
+        <p>camlink</p>
+      </div>
+
+      <div class="camstart_mid_bottom">
+        <canvas class="canvas"></canvas>
+
+        <div class="controls">
+          <button class="stop">Stop</button>
+          <button class="live">Go Live</button>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="camstart_right">
+
+      <p>Linked Cameras</p>
+
+      <div class="cameras">
+            
+
+      </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+  </div>
+
+  <script src="{{ url_for('static', filename='js/camstart.js') }}"></script>
+</body>
+</html>

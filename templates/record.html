@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=0, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/record.css') }}">
+</head>
+<body>
+  
+  <div id="container">
+    <div class="background">
+        <video class="preview"></video>
+        <video class="capture hidden" controls></video>
+    </div>
+
+    <div class="buttons">
+        <button class="start"></button>
+        <button class="stop hidden"></button>
+    </div>
+</div>
+
+  <script src="{{ url_for('static', filename='js/record.js') }}"></script>
+</body>
+</html>
