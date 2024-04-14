@@ -1,0 +1,89 @@
+"use strict";
+
+
+let code = document.querySelector(".linker>input");
+let link = document.querySelector(".link");
+
+let start = document.querySelector(".start");
+
+let baseHost = "https://192.168.171.143";
+let port = "5500";
+
+
+
+function send(method,address,data={},vid="0", blob="0"){
+
+  let host = baseHost + ":" + port + "/requester/";
+
+  let request;
+
+  let info = {
+    'method':method,
+    'address':address,
+    'data':data,
+    'vid':vid,
+    'blob':blob,
+  };
+  
+  request = new Request(host,{
+    method:"POST",
+    mode: 'no-cors',
+    headers:{
+      "Content-Type":"application/json",
+    },
+    body:JSON.stringify(info),
+  });
+  
+  
+  console.log(host);
+
+  return fetch(request)
+  .then(response=>{
+    if (!response.ok){
+      throw new Error("unexpected error!");
+    }
+
+    return response.json();
+  })
+  .then(response=>{
+    return response;
+  })
+  .catch(error=>{
+    console.log(error);
+  })
+
+}
+
+
+
+
+
+start.addEventListener("click",()=>{
+  send("POST","screenshare/start/")
+  .then(data=>{
+    if (data["msg"] == "success"){
+
+      window.location.replace(baseHost+":"+port+"/screenshare/start");
+
+
+
+    }
+  });
+
+});
+
+
+
+
+link.addEventListener("click",()=>{
+  send("POST","screenshare/link/",{"code":code.value})
+  .then(data=>{
+    console.log(data['msg']);
+    if(data['msg'] == "success"){
+      window.location.replace(baseHost+":"+port+"/screenshare/watch");
+
+    }
+
+  });
+
+});

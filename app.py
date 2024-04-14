@@ -86,6 +86,12 @@ def worker():
     return send_file("./static/js/interval_worker.js")
 
 
+@app.route('/screenshare/watch/watch_worker.js/')
+def watch_worker():
+
+    return send_file("./static/js/watch_worker.js")
+
+
 
 @app.route('/camlink/start/play_worker.js/')
 def pp():
@@ -94,24 +100,34 @@ def pp():
     
 
 
-# num = 0
 @app.route('/streamer/', methods=['POST'])
 def streamer():
-    # global num
 
-    # chunk = request.files['chunk']
     chunk = request.files
 
 
     response = send("POST","camlink/stream/",chunk,"0","1")
 
-    # with open(f'{num}.webm','ab') as clip:
-    #     clip.write(chunk.read())
-
-    # num = num + 1
-
-    # return jsonify({"msg":"again"})
+    
     return response
+
+
+
+
+@app.route('/streaming/', methods=['POST'])
+def streaming():
+
+    chunk = request.files
+
+
+    response = send("POST","screenshare/stream/",chunk,"0","1")
+
+    
+    return response
+
+
+
+
 
 
 @app.route('/camlink/')
@@ -152,24 +168,27 @@ def screenstart():
 
 
 
+@app.route('/screenshare/watch/')
+def watch():
+    return render_template('watch.html')
 
 
 
-# num = 1
 
-# @app.route('/camlink/stream/', methods = ['POST'])
-# def stream():
-#     global num
-#     chunk = request.files['chunk']
 
-    
+@app.route('/home/')
+def watch():
+    return render_template('home.html')
 
-#     with open(f'video{num}.webm','ab') as clip:
-#         clip.write(chunk.read())
 
-#     # num = num + 1
 
-#     return jsonify({'msg':'received'})
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=0, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/screenstart.css') }}">
+</head>
+<body>
+  
+  <div class = "camlink_container">
+
+    <div class="camlink_left">
+      <h2>CAMLINK</h2>
+
+      <div class="navigation">
+        <div class="nav">Home</div>
+        <div class="nav">CamLink</div>
+        <div class="nav selected">Screen Share</div>
+      </div>
+    
+      <p>Logout</p>
+    
+    </div>
+
+
+    <div class="camstart_mid">
+      
+      <div class="camstart_mid_top">
+        <p>Link Code: </p>
+        <p>screen</p>
+      </div>
+
+      <div class="camstart_mid_bottom">
+        <canvas class="canvas"></canvas>
+        <video class = "video"></video>
+
+        <div class="controls">
+          <button class="stop">Stop</button>
+          <button class="live">Go Live</button>
+        </div>
+      </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+  </div>
+
+  <script src="{{ url_for('static', filename='js/screenstart.js') }}"></script>
+</body>
+</html>
