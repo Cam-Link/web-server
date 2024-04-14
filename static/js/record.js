@@ -130,7 +130,7 @@ function streamer(data){
 let constraints = {
     audio:true,
     video:{
-        facingMode:"user",
+        facingMode:"environment",
         width:size[0],
         height:size[1],
         aspectRatio: 16 / 9,

@@ -10,8 +10,7 @@ let cameras = document.querySelector(".cameras");
 let canvas = document.querySelector(".canvas");
 let ctx = canvas.getContext('2d');
 
-
-
+let source;
 
 
 let baseHost = "https://192.168.171.143";
@@ -82,6 +81,38 @@ function send(method,address,data={}, vid = "0", blob="0"){
 
 
 
+
+
+
+stop.addEventListener('click',function(){
+
+  send("POST","camlink/stop/")
+  .then(response=>{
+    if(response['msg'] == "success"){
+      window.location.replace(baseHost+":"+port+"/camlink/");
+    }
+  })
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 let counter = -1;
 
 
@@ -119,29 +150,28 @@ worker.onmessage = function(e){
 
     counter+=1;
 
-    let html;
-    
-    if (first){
-      html = `
-      <div class="camera">
-        <video class="video viewing" data-id="${counter}" data-uid="${camera} autoplay"></video>
-      </div> 
-    `;
 
-    first = false;
-    }else{
-      html = `
+    let html = `
       <div class="camera">
         <video class="video" data-id="${counter}" data-uid="${camera} autoplay"></video>
       </div> 
-    `;
+      `;
+
+    cameras.insertAdjacentHTML('beforeend', html);
+    
+    if (first){
+  
+      source = document.querySelector('.video');
+      source.classList.add('viewing');
+
+      playOnCanvas();
+
+      first = false;
     }
     
 
 
-    cameras.insertAdjacentHTML('beforeend', html);
-
-
+    
     new Player(counter, camera, document.querySelectorAll('.video')[counter]);
 
     
@@ -200,6 +230,13 @@ class Player{
 
 
   starter(){
+
+    this.video.onclick = function(){
+      source = this.video;
+      document.querySelector('.viewing').classList.remove('viewing');
+      this.video.classList.add('viewing');
+
+    }.bind(this);
 
 
     window.addEventListener('beforeunload', function() {
@@ -278,6 +315,16 @@ class Player{
 
 
 
+// function to change the view of the canvas and selected vid
+
+function playOnCanvas(){
+  if(source){
+    ctx.drawImage(source,0,0,canvas.width, canvas.height);
+
+    source.requestVideoFrameCallback(playOnCanvas);
+  }
+
+}
 
 
 
