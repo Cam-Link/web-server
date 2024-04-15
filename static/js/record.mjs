@@ -1,6 +1,6 @@
 "using strict";
 
-
+import { ip } from './ip.mjs';
 
 let container = document.querySelector("#container");
 let box = document.querySelector('.background');
@@ -24,7 +24,7 @@ container.addEventListener("click",function(){
 
 
 
-let baseHost = "https://192.168.67.143";
+let baseHost = "https://"+ip;
 let port = "5500";
 
 

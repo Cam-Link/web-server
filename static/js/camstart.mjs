@@ -1,6 +1,7 @@
 "use strict";
 
 
+import { ip } from './ip.mjs';
 
 let stop = document.querySelector(".stop");
 let live = document.querySelector(".live");
@@ -15,7 +16,7 @@ let view = canvas.captureStream();
 let source;
 
 
-let baseHost = "https://192.168.67.143";
+let baseHost = "https://" + ip;
 let port = "5500";
 
 
@@ -205,6 +206,8 @@ live.addEventListener('click',function(){
 
 
 function start_live(){
+
+  let zworker = new Worker('multi_worker.js');
   
   let options = {
     mimeType: "video/webm; codecs=vp8",
@@ -214,26 +217,25 @@ function start_live(){
 
 
   livemediaRecorder.ondataavailable = function(event){
-    if(event.data.size > 0 && livemediaRecorder.state == "recording"){
-
-
-        let liveformData = new FormData();
-        liveformData.append('chunk',event.data);
-
-        
-        send2("POST","live/stream/",liveformData,"0","1")
-        .then(response=>{
-            if(response['msg']){
-                console.log(response['msg']);
-            }
-        });
-
-        console.log('sent');  
+    if(event.data.size > 0){
+      zworker.postMessage({"msg":"send","data":event.data});
     };
   };
 
 
   livemediaRecorder.start(3000);
+
+
+
+
+  
+
+  window.addEventListener('beforeunload', function() {
+    zworker.postMessage({'msg':'terminate'});
+  });
+
+
+
 
 
 }

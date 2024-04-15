@@ -1,6 +1,5 @@
 
 
-
 self.addEventListener('message',function(e){
   if (e.data == "start"){
 

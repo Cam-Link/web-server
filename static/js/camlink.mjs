@@ -1,12 +1,13 @@
 "use strict";
 
+import { ip } from './ip.mjs';
 
 let code = document.querySelector(".linker>input");
 let link = document.querySelector(".link");
 
 let start = document.querySelector(".start");
 
-let baseHost = "https://192.168.67.143";
+let baseHost = "https://" + ip;
 let port = "5500";
 
 
@@ -59,11 +60,11 @@ function send(method,address,data={},vid="0", blob="0"){
 
 
 start.addEventListener("click",()=>{
-  send("POST","screenshare/start/")
+  send("POST","camlink/start/")
   .then(data=>{
     if (data["msg"] == "success"){
 
-      window.location.replace(baseHost+":"+port+"/screenshare/start");
+      window.location.replace(baseHost+":"+port+"/camlink/start");
 
 
 
@@ -76,11 +77,11 @@ start.addEventListener("click",()=>{
 
 
 link.addEventListener("click",()=>{
-  send("POST","screenshare/link/",{"code":code.value})
+  send("POST","camlink/link/",{"code":code.value})
   .then(data=>{
     console.log(data['msg']);
     if(data['msg'] == "success"){
-      window.location.replace(baseHost+":"+port+"/screenshare/watch");
+      window.location.replace(baseHost+":"+port+"/camlink/record");
 
     }
 

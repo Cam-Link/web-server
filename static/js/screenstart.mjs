@@ -1,6 +1,7 @@
 "use strict";
 
 
+import { ip } from './ip.mjs';
 
 let stop = document.querySelector(".stop");
 let live = document.querySelector(".live");
@@ -13,8 +14,9 @@ let ctx = canvas.getContext('2d');
 
 let source;
 
+let go = true;
 
-let baseHost = "https://192.168.67.143";
+let baseHost = "https://"+ip;
 let port = "5500";
 
 
@@ -112,7 +114,7 @@ function send(method,address,data={}, vid = "0", blob="0"){
 
 
 stop.addEventListener('click',function(){
-
+  go=false;
   send("POST","screenshare/stop/")
   .then(response=>{
     if(response['msg'] == "success"){
@@ -141,6 +143,9 @@ stop.addEventListener('click',function(){
 
 function streamer(data){
 
+  if (!go){
+    return;
+  }
 
   send("POST","screenshare/stream/",data,"0","1")
   .then(response=>{
@@ -207,8 +212,10 @@ navigator.mediaDevices.getDisplayMedia(constraints)
           let formData = new FormData();
           formData.append('chunk',event.data);
 
+          if(go){
+            streamer(formData);
+          }
           
-          streamer(formData);
 
 
           console.log('sent');  

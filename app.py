@@ -3,6 +3,9 @@ import requests
 import json
 import socket
 
+import mimetypes
+mimetypes.add_type('application/javascript', '.mjs')
+
 app = Flask(__name__)
 app.secret_key = "ahtye33rk@#!7798s"
 host_address = socket.gethostbyname(socket.gethostname())
@@ -88,6 +91,7 @@ def worker():
 
 @app.route('/screenshare/watch/watch_worker.js/')
 def watch_worker():
+    print("here")
 
     return send_file("./static/js/watch_worker.js")
 
@@ -97,6 +101,12 @@ def watch_worker():
 def pp():
 
     return send_file("./static/js/play_worker.js")
+
+
+@app.route('/camlink/start/multi_worker.js/')
+def dpp():
+
+    return send_file("./static/js/multi_worker.js")
     
 
 
@@ -217,7 +227,7 @@ live_session = {}
 def send2(method,address, data={}, vid="0", blob="0"):
   global live_session
 
-  url = f'http://{live_host}:{live_port}/' + address
+  url = f'https://{live_host}:{live_port}/' + address
 
 
   if method == "POST":
