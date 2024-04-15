@@ -24,7 +24,7 @@ container.addEventListener("click",function(){
 
 
 
-let baseHost = "https://192.168.171.143";
+let baseHost = "https://192.168.67.143";
 let port = "5500";
 
 
@@ -130,7 +130,7 @@ function streamer(data){
 let constraints = {
     audio:true,
     video:{
-        facingMode:"environment",
+        facingMode:"user",
         width:size[0],
         height:size[1],
         aspectRatio: 16 / 9,

@@ -8,7 +8,7 @@ app.secret_key = "ahtye33rk@#!7798s"
 host_address = socket.gethostbyname(socket.gethostname())
 # host_address = "127.0.0.1"
 
-django = "192.168.171.143"
+django = host_address
 django_port = 8000
 
 
@@ -177,8 +177,149 @@ def watch():
 
 
 @app.route('/home/')
-def watch():
+def home():
     return render_template('home.html')
+
+
+@app.route('/home/stream/')
+def home_watch():
+    return render_template('stream.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# communication with the live server................
+
+
+
+
+live_host = host_address
+live_port = 8800
+
+live_session = {}
+
+
+
+def send2(method,address, data={}, vid="0", blob="0"):
+  global live_session
+
+  url = f'http://{live_host}:{live_port}/' + address
+
+
+  if method == "POST":
+      if blob == "1":
+          # headers = {'Content-Type':'video/webm'}
+          response = requests.post(url, files=data, verify=False, cookies=live_session.get('session', ''))
+      else:
+          headers = {'Content-Type':'application/json'}
+          response = requests.post(url, json=data, headers=headers, verify=False, cookies=live_session.get('session', ''))
+
+  elif method == "GET":
+      if blob == "1":
+          headers = {'Content-Type':'video/webm'}
+          response = requests.get(url, data=data, headers=headers, verify=False, cookies=live_session.get('session', ''))
+      else:
+          headers = {'Content-Type':'application/json'}
+          response = requests.get(url, json=data, headers=headers, verify=False, cookies=live_session.get('session', ''))
+
+  if response.cookies:
+      live_session['session'] = response.cookies.get_dict()
+  
+
+  if vid == "1":
+
+      content_type = response.headers.get('Content-Type')
+
+      if 'application/json' in content_type:
+          return [response.text, True]
+          
+
+      return [response.content, False]
+  else:
+      return response.text
+
+
+
+
+
+
+
+
+@app.route('/requester2/', methods=['POST'])
+def requester2():
+    data = json.loads(request.data)
+
+    if data['address'] == "live/link/":
+        response = send2(data['method'],data['address'],{"code":"camlink"},data['vid'],data['blob'])
+    else:
+        response = send2(data['method'],data['address'],data['data'],data['vid'],data['blob'])
+
+    if data['vid'] == "1":
+
+        if response[1]:
+            new_response = make_response(response[0])
+            new_response.headers['Content-Type'] = 'application/json'
+
+            return new_response
+        
+        return response[0]
+
+    
+    
+    return response
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@app.route('/streaming2/', methods=['POST'])
+def live_stream():
+
+    chunk = request.files
+
+    response = send2("POST","live/stream/",chunk,"0","1")
+
+    return response
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

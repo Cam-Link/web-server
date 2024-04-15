@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=0, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+  
+  <div class = "camlink_container">
+
+    <div class="camlink_left">
+      <h2>CAMLINK</h2>
+
+      <div class="navigation">
+        <a href="/home/"><div class="nav selected">Home</div></a>
+        <a href="/camlink/"><div class="nav">CamLink</div></a>
+        <a href="/screenshare/"><div class="nav">Screen Share</div></a>
+      </div>
+    
+      <p>Logout</p>
+    
+    </div>
+
+
+    <div class="camstart_mid">
+      
+      <div class="camstart_mid_top">
+        <div class="linker">
+          <input type="text" placeholder="Link Code">
+          <button class="link">Watch</button>
+        </div>
+      </div>
+      
+
+      <div class="camstart_mid_bottom">
+        <div class='videos'>
+          <video class="video" autoplay></video>
+
+        
+        
+        </div>
+      
+      </div>
+        
+
+    </div>
+
+
+
+
+
+
+
+
+
+  </div>
+
+  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+</body>
+</html>

@@ -10,10 +10,12 @@ let cameras = document.querySelector(".cameras");
 let canvas = document.querySelector(".canvas");
 let ctx = canvas.getContext('2d');
 
+let view = canvas.captureStream();
+
 let source;
 
 
-let baseHost = "https://192.168.171.143";
+let baseHost = "https://192.168.67.143";
 let port = "5500";
 
 
@@ -84,7 +86,94 @@ function send(method,address,data={}, vid = "0", blob="0"){
 
 
 
+
+
+function send2(method,address,data={}, vid = "0", blob="0"){
+
+  let host;
+
+  if (blob == "0"){
+    host = baseHost + ":" + port + "/requester2/";
+  }else{
+    host = baseHost + ":" + port + "/streaming2/";
+  }
+
+  let request;
+
+  let info = {
+    'method':method,
+    'address':address,
+    'data':data,
+    'vid':vid,
+    'blob':blob,
+  };
+
+  if (blob == "0"){
+    request = new Request(host,{
+        method:"POST",
+        mode: 'no-cors',
+        headers:{
+          "Content-Type":"application/json",
+        },
+        body:JSON.stringify(info),
+      });
+
+  }else{
+    request = new Request(host,{
+        method:"POST",
+        mode: 'no-cors',
+        body:data,
+      });
+  }
+  
+  
+  
+  
+
+  return fetch(request)
+  .then(response=>{
+    if (!response.ok){
+      throw new Error("unexpected error!");
+    }
+
+    if (vid == "1"){
+      return response.arrayBuffer();
+    }
+
+    return response.json();
+  })
+  .then(response=>{
+
+    return response;
+  })
+  .catch(error=>{
+    console.log(error);
+  })
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 stop.addEventListener('click',function(){
+
+  send2("POST","live/stop/")
+  .then(response=>{
+    console.log(response);
+    if(response['msg'] == "success"){
+      console.log("live stopped");
+    }
+  })
 
   send("POST","camlink/stop/")
   .then(response=>{
@@ -94,6 +183,68 @@ stop.addEventListener('click',function(){
   })
 
 })
+
+
+
+
+
+live.addEventListener('click',function(){
+
+  send2("POST","live/link/")
+  .then(response=>{
+    console.log(response);
+    if(response['msg'] == "success"){
+      start_live();
+      console.log("startLive");
+    }
+  })
+
+})
+
+
+
+
+function start_live(){
+  
+  let options = {
+    mimeType: "video/webm; codecs=vp8",
+  };
+
+  let livemediaRecorder = new MediaRecorder(view,options);
+
+
+  livemediaRecorder.ondataavailable = function(event){
+    if(event.data.size > 0 && livemediaRecorder.state == "recording"){
+
+
+        let liveformData = new FormData();
+        liveformData.append('chunk',event.data);
+
+        
+        send2("POST","live/stream/",liveformData,"0","1")
+        .then(response=>{
+            if(response['msg']){
+                console.log(response['msg']);
+            }
+        });
+
+        console.log('sent');  
+    };
+  };
+
+
+  livemediaRecorder.start(3000);
+
+
+}
+
+
+
+
+
+
+
+
 
 
 

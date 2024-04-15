@@ -40,7 +40,7 @@ function player(){
 
 
 
-let baseHost = "https://192.168.171.143";
+let baseHost = "https://192.168.67.143";
 let port = "5500";
 
 

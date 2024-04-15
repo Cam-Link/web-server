@@ -6,7 +6,7 @@ let link = document.querySelector(".link");
 
 let start = document.querySelector(".start");
 
-let baseHost = "https://192.168.171.143";
+let baseHost = "https://192.168.67.143";
 let port = "5500";
 
 
