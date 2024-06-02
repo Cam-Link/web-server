@@ -16,7 +16,7 @@ self.addEventListener('message',function(e){
 
 
 
-let baseHost = "https://192.168.67.143";
+let baseHost = "https://192.168.19.143";
 let port = "5500";
 
 

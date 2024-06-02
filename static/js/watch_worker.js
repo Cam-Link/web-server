@@ -40,7 +40,7 @@ function player(){
 
 
 
-let baseHost = "https://192.168.67.143";
+let baseHost = "https://192.168.19.143";
 let port = "5500";
 
 
@@ -103,7 +103,7 @@ function send(method,address,data={}, vid = "0", blob="0"){
 
 
 
-
+let first = true;
 
 
 function loader(){
@@ -112,7 +112,15 @@ function loader(){
   send("GET","screenshare/play/",{}, "1")
   .then(data=>{
     if (!data['msg']){
-      this.self.postMessage(data);
+      if (first){
+        
+        this.self.postMessage({'msg':"sync","data":data,"num":5});
+        first = false;
+
+      }else{
+
+        this.self.postMessage({'msg':"add","data":data});
+      }
     }else{
       setTimeout(()=>{
         loader();

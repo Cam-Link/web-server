@@ -2,7 +2,7 @@
 
 let video = document.querySelector('.video');
 
-
+let seek = false;
 
 const mimeCodec = 'video/webm; codecs="vp8"';
 
@@ -48,6 +48,11 @@ function sourceopen(){
   currentSourceBuffer.addEventListener('updateend', function (_) {
     worker.postMessage({'msg':'load'});
 
+    if (seek){
+      video.currentTime = 5 * 3;
+      seek = false;
+    }
+
   });
 
   worker.postMessage({'msg':'load'});
@@ -58,7 +63,15 @@ function sourceopen(){
 
 worker.onmessage = function(e){
   // console.log("appending");
-  currentSourceBuffer.appendBuffer(e.data);
+  if (e['msg'] == "add"){
+
+    currentSourceBuffer.appendBuffer(e['data'].data);
+  }else{
+
+    seek = true;
+    currentSourceBuffer.appendBuffer(e['data'].data);
+    console.log('synced');
+  }
 
 };
 
